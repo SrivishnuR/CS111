@@ -1,0 +1,29 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab4b.c -
+This program first processes the inputs, then intializes the sensors. 
+After that it loops indefinitely outputting the timestamp and temperature
+gotten from the temperature sensor at a user defined interval. Input is 
+polled for from stdin and processed for commands. Finally if the OFF command
+is sent or if the button is pressed, the program deinitializes the sensors
+and ends.
+
+Makefile -
+default: builds the program using the -Wall and -Wextra options along with
+the -lmraa library for the sensors and the -lm library for the log function.
+
+clean: gets rid of the executable and tar
+
+check: runs smoketest.sh
+
+dist: makes a tar of the README, Makefile, and lab4b.c
+
+smoketest.sh - 
+Runs a smoketest. Tests to see if the program accepts all the arguments
+and then checks to see if it takes all the options and logs them correctly
+
+README -
+This file
