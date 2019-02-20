@@ -1,0 +1,27 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab1a.c - 
+Initially the current terminal settings are extracted from STDIN, modified,
+and then set. Without the SHELL choice, we have a simple readWrite function
+that reads from STDIN and echoes the input. 
+
+If SHELL is specified, two pipes are opened. One for transmitting data
+to the shell, and one for retreiving data from it. A child process is opened 
+for the shell and the stdin, stdout, and stderr are all set to the corresponding
+pipes. The parent process then gets data from the keyboard, modifies it accordingly,
+and pipes it to the shell. After this the output results are piped back to the parent
+process, modified, and then sent to stdout. This is all done with the poll function, 
+which waits until input or output from shell is detected. If ctrl-C or ctrl-D is pressed
+then the process either kills the shell or closes the pipe to write to shell.
+
+All that was used was the function man pages for this project. I had some issues with the 
+sanity check script but that was solved after I re downloaded the script.
+
+Makefile -
+Very simple this time. Includes a clean and a dist
+
+README -
+This file right here

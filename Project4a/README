@@ -1,0 +1,31 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+Serial Number: X0013UH933
+MAC address: 88:4a:ea:62:41:6e
+
+my_beaglebone.jpg -
+Picture of me holding the beaglebone
+
+connected.png - 
+Screenshot of the ifconfig and a ping to show that the beaglebone is indeed wifi connected
+The MAC address can be found under wlan0 under ether
+
+copy.png -
+Screenshot of me using winSCP, an open source SFTP client to transfer my helloworld.c file
+from my desktop to my beaglebone
+
+build_run.png -
+Screenshot of me building and running the helloworld.c file that I just transferred from my
+computer to the beaglebone
+
+git.png -
+Screenshot fo me cloning my project MyReceipts from my github into my beaglebone
+
+Makefiile - 
+Contains a default option only that compresses all the required files
+
+README -
+This file right here

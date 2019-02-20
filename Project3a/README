@@ -1,0 +1,34 @@
+NAME: Srivishnu Ramamurthi, Chi Shu Wong
+EMAIL: vishnuvtt@gmail.com, chishuwong@ucla.edu
+ID: 504845437, 204843623
+SLIPDAYS: 3
+
+lab3a.c -
+File that goes through an ext2 file system and prints out information. 
+This program only supports one group as the TA specified that was all that was necessary. 
+However, it does support a variable block size. Initially it prints out the superblock and 
+singular group info. After that loops through and prints out the free blocks and free inodes. 
+This part was fairly simple. 
+Printing out inode information was still not too difficult. The hardest part was parsing the 
+time information. 
+With directory information, I assumed the linked list structure would automatically end in a 
+null node with an INODE field of 0. This was a wrong assumption to make. The program started
+working once I instead iterated through the blocks and indirect blocks of the directory. 
+While I do not have a way to test the indirect blocks for the directory entry as that would 
+need a file system with an incredibly large amount of directories, I believe my logic is correct 
+and it should work.
+The indirect entries were fairly simple once I got the indirect blocks of the directories down. 
+However, I wrongly assumed that if the single indirect block wasn't allocated, this automatically
+meant the second and third indirect blocks wouldn't be allocated as well. Another mistake I made is 
+that I assumed in an indirect entry block that consecutive entries would always be allocated and 
+once you hit an entry that ended in 0 it implied that there where no other blocks for the file left. 
+This assumption was also wrong and once I corrected it the program worked as supposed to.
+
+Makefile -
+Very simple 
+default: compiles lab3a.c with -Wall and -Wextra
+dist: creates tar of lab3a.c, README, and Makefile
+clean: removes the tar and lab3a executable
+
+README - 
+This file

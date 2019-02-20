@@ -1,0 +1,74 @@
+Total: 1278 samples
+    1118  87.5%  87.5%     1118  87.5% spinLock
+     136  10.6%  98.1%      136  10.6% __strcmp_sse42
+      10   0.8%  98.9%       86   6.7% SortedList_insert
+       7   0.5%  99.5%       73   5.7% SortedList_lookup
+       6   0.5%  99.9%        6   0.5% _init
+       1   0.1% 100.0%        1   0.1% SortedList_length
+       0   0.0% 100.0%     1278 100.0% __clone
+       0   0.0% 100.0%     1278 100.0% start_thread
+       0   0.0% 100.0%     1278 100.0% threadFunc
+ROUTINE ====================== spinLock in /u/cs/ugrad/srivishn/Documents/CS111/Project2b/lab2_list.c
+  1118   1118 Total samples (flat / cumulative)
+     .      .  397:   }
+     .      .  398: 
+     .      .  399:   threadTime += (long)(endTime.tv_sec - startTime.tv_sec) * 1000000000 + (endTime.tv_nsec - startTime.tv_nsec);
+     .      .  400: }
+     .      .  401: 
+---
+     .      .  402: void spinLock(int *lock) {
+     .      .  403:   clockid_t clk = CLOCK_REALTIME;
+     .      .  404:   struct timespec startTime, endTime;
+     .      .  405: 
+     .      .  406:   if(clock_gettime(clk, &startTime)) {
+     .      .  407:     fprintf(stderr, "Error obtaining clock time\n");
+     .      .  408:     exit(1);
+     .      .  409:   }
+     .      .  410:   
+  1118   1118  411:   while(__sync_lock_test_and_set(lock, 1)) { }
+     .      .  412: 
+     .      .  413:   if(clock_gettime(clk, &endTime)) {
+     .      .  414:     fprintf(stderr, "Error obtaining clock time\n");
+     .      .  415:     exit(1);
+     .      .  416:   }
+     .      .  417: 
+     .      .  418:   threadTime += (long)(endTime.tv_sec - startTime.tv_sec) * 1000000000 + (endTime.tv_nsec - startTime.tv_nsec);
+     .      .  419: }
+---
+     .      .  420: 
+     .      .  421: void sigHandler() {
+     .      .  422:   fprintf(stderr, "Segmentation fault caught\n");
+     .      .  423:   exit(2);
+     .      .  424: }
+ROUTINE ====================== spinLock in /u/cs/ugrad/srivishn/Documents/CS111/Project2b/lab2_list.c
+  1118   1118 Total samples (flat / cumulative)
+     .      .  397:   }
+     .      .  398: 
+     .      .  399:   threadTime += (long)(endTime.tv_sec - startTime.tv_sec) * 1000000000 + (endTime.tv_nsec - startTime.tv_nsec);
+     .      .  400: }
+     .      .  401: 
+---
+     .      .  402: void spinLock(int *lock) {
+     .      .  403:   clockid_t clk = CLOCK_REALTIME;
+     .      .  404:   struct timespec startTime, endTime;
+     .      .  405: 
+     .      .  406:   if(clock_gettime(clk, &startTime)) {
+     .      .  407:     fprintf(stderr, "Error obtaining clock time\n");
+     .      .  408:     exit(1);
+     .      .  409:   }
+     .      .  410:   
+  1118   1118  411:   while(__sync_lock_test_and_set(lock, 1)) { }
+     .      .  412: 
+     .      .  413:   if(clock_gettime(clk, &endTime)) {
+     .      .  414:     fprintf(stderr, "Error obtaining clock time\n");
+     .      .  415:     exit(1);
+     .      .  416:   }
+     .      .  417: 
+     .      .  418:   threadTime += (long)(endTime.tv_sec - startTime.tv_sec) * 1000000000 + (endTime.tv_nsec - startTime.tv_nsec);
+     .      .  419: }
+---
+     .      .  420: 
+     .      .  421: void sigHandler() {
+     .      .  422:   fprintf(stderr, "Segmentation fault caught\n");
+     .      .  423:   exit(2);
+     .      .  424: }

@@ -1,0 +1,52 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab3b.py -
+This script initially parses the entire csv file and puts it in appropriate data structures. 
+SUPERBLOCK is harvested for individual values - totalblocks, totalinodes, blocksize, and
+reserved inodes
+GROUP is harvested for the inode table
+The combination of this information lets us figure out the size of the inode table and where
+the first data block is located
+BFREE and IFREE is put into a set. This is done as we only want to see whether a value is in
+BFREE or IFREE or not and this is incredibly fast when using a set
+INODE is put in a tuple and appended in a list as we need to loop through all the inodes. 
+The inodes are also put into a dictionary called linkmap that maps each inode to a list that 
+includes its linkcount and a 0 which will later be updated to reflect directory references
+DIRENT is put into a list of tuples of all the values
+The directory entries are then parsed for they inode parent number and reference number
+and are put into a dictionary parentmap
+INDIRECT is put into a list of tuples of all the values
+
+We initially go through all the inodes and add them to a dictionary called blockmap that 
+maps the block number to a list of tuples. This tuple includes the inode number, the offset of 
+the referenced block, and the level of the referenced block. After this, we loop through the 
+indirect references and do the same thing. Finally, we loop through all the blocks that aren't 
+reserved.
+Now we can do error checking by
+Checking if a key exists in blockmap and bfree
+and by looping through the entires to a blockmap entry and checking the length
+
+After this we loop through all the inodes and compare to ifree
+
+Finally we loop through the directory entries. While doing so we add to the linkmap for specific 
+inodes. If we find a directory entry of '.' we make sure that the inode parent points to the referenced
+inode, and if a directory entry of '..', we make sure that the referenced inode is equal to the parent 
+of the current directory by using the dictionary parentmap.
+
+Finally by using link map we go through all the inodes and we check if the numlinks matches up to the 
+counted references.
+
+Makefile -
+default:
+Since python does not hae an executable variant, I create a shell script lab3b here chmod it as well
+for usage
+clean:
+Deletes tar and lab3b script
+dist:
+Creates tar
+
+README -
+This file

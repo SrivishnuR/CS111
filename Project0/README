@@ -1,0 +1,42 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 1
+
+lab0.c: 
+Initially getopt-long is used to parse through the input options. Once this has been done,
+we check if an input file is given and then we check to see if it is valid. If it is, we save
+the file descriptor. Same with the output file except here we create the file if it does not 
+already exist. We then check if the option --catch has been used. If so, we set up the signalhandler
+to trigger upon a Segmentation Fault. Finally, if the option --segfault is used, we attempt to assign a
+value to a derferenced null pointer to cause a segmentation fault.
+
+In this project I have found no need for the use of the close and dup functions. Due to this I have used 
+them in a useless way at the end of the program just to pass the sanity check. 
+
+Makefile: 
+All but make check are fairly simple. 
+For check I set up five tests which are run in order. The first test checks if the core functionality of the 
+program works by using redirecting the contents of a file into another file, and then using diff upon the two
+to make sure there are no differences.
+The second test checks for bad arguments. If an error code other than 1 is returned it reports a problem.
+The third test checks for bad input by using a file that doesn't exist as input. If an error code other
+than 2 is reported, it reports a problem.
+The fourth test checks for bad output by using a file that does not have write permissions. If an error code
+other than 3 is reported, it reports a problem.
+Finally the fifth test uses both --segfault and --check to check both wether the seg fauult is working and 
+the handler is working as well. If an error code other than 4 is reported, it reports a problem.
+
+README:
+Contains information about the project
+
+backtrace.png:
+This shows us exactly where the segmentation fault is caused useing the --segfault option.
+We can see it is on line 69 and is due to the assignment of *segpointer = 1. The backtrace
+further confirms this.
+
+breakpoint.png:
+Using this information we are able to set a breakpoint at line 69. We can analyze the values
+of segpointer and what it references to. When we print segpointer we can see that the value it
+holds is 0x0, or NULL. When we ask to print *segpointer, we see that the program tells us we 
+are not able to access it since the pointer is NULL.

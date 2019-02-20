@@ -1,0 +1,32 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab1b-client.c - 
+Initially the current terminal settings are extracted from STDIN, modified,
+and then set. The options are then extracted. And we attempt to connect to the server.
+
+Once we do that, if a key is supplied, we load mcrypt to be used for encryption and decryption.
+We then poll for input from keyboard, encrypt it based on the file supplied and then sent to the server.
+We also poll for output from the server, decrypt it, and send it to stdout.
+If the server exits, we poll for POLLRDHUP to break from the loop.
+We also have a log option that logs the encrypted input and the pre decrypted output. 
+
+lab1b-server.c -
+We first extract the options and open a socket for connection. Once we connect, we create pipes to and from
+the shell and crete a child process that runs the shell. 
+The main process then polls for data from the 
+client and decrypts it based on the file supplied and then sends that to the shell.
+The shell output is then encrypted and sent back to the client.
+All the while we watch for ctrlC and ctrlD and sigpipe from the shell for exit conditions.
+When we exit we close the sockets to let the client recieve the POLLRDHUP error.
+
+Makefile -
+Includes a make, make client, make server, make clean, and make dist
+
+my.key -
+My custom key for encryption
+
+README -
+This file right here

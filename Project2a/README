@@ -1,0 +1,99 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab2a_add.c -
+Program that runs multiple threads on an add function that adds 1 and then subtracts 1 for a certain ammount of iterations
+on a shared ocunter. A yield option can be added to make critical section issues more prominent. Options for a spin lock, mutex,
+or a compare and swap atomic update exist as well.
+
+lab2a_list.c - 
+Program that runs multiple threads on a list that at max will be iterations*threads long. For each iteration in a thread the thread
+adds a new element to the list. Then the thread checks the list's size, and then finally finds each item and deletes it. There is a yield
+option for the thread to yield in each one of the critical sections of this function and also an option for a mutex or spin lock.
+
+SortedList.h - 
+Header for sorted list program. Includes opt-yield extern which allows the calling program to yield at certain critical points.
+
+SortedList.c -
+File for sorted, doubly-linked list. Includes insert, delete, lookup, and length functions. Depending on the opt-yield integer, 
+you can trigger yields at critical sections in either one of these functions.
+
+Makefile -
+Build, dist and clean are fairly self explanatory. Tests runs all the tests and puts it in an appropriate csv file.
+Graphs takes the csv files and uses gnuplot to make the appropriate graphs. Dependicy checking is very important. 
+I wasn't able to pass the sanity check until I stopped my make clean from removing the .csv and .png files.
+
+lab2_add.csv -
+Contains results from tests
+
+lab2_list.csv -
+Contains results from tests
+
+*.png -
+Contains the gnuplot graphs
+
+README -
+This file
+
+Questions -
+2.1.1 -
+Why does it take many iterations before errors are seen?
+If we have 10 threads, it seems the jump from 100 iterations to 1000 is where errors start to occur.
+This is because the more iterations, the longer each thread runs for, and the more context switches are made.
+The more context switches made the higher the likleihood a switch happens doing a critical piece of code and causes an error. 
+
+Why does a significantly smaller number of iterations so seldom fail?
+Each thread runs for much less and due to this there are less context switches. Thus there is a less likely chance of the 
+switch to happen at a critical piece of code and cause an error.
+Also, for example, if the scheduling algorithm to switch threads was something like MLFQ or an algorithm that gave new threads 
+priority, a new thread would have to do less context switches in the same time where an old thread would have to do more due to 
+reduced priority.
+
+2.1.2 -
+Why are the -yield runs so much slower?
+This is due to the fact that every time the add function is run there is a context switch and these are very expensive. In total
+there will be at least 2 * iterations * threads context switches which is a lot of overhead.
+
+Where is the additional time going?
+To the context switches.
+
+Is it possible to get valid per-operation timings if we are using the --yield option?
+No, as these per operation timings include the context switches and the ammount of time this stuff takes is unpredictable.
+However, if we used the per-thread clock to individual thread time and changed the program to accomadate that we could get 
+more accurate results.
+
+2.1.3 -
+Why does the average cost per operation drop with incresing iterations?
+This is because the ammount it takes to create a thread is constant and it is more noticable when there are less iterations.
+When the iterations increase this cost becomes less relevant and the cost per operation drops.
+
+If the cost per iteration is a function of the number of iteratinos, how do we know how many iterations to run (or what the "correct")
+cost is?
+We would have to run a large scale of iterations and base our tests on that as so that the cost of thread creation is nominal.
+
+2.1.4 -
+Why do all of the options perform similarly for low numbers of threads?
+This is due to the fact that there are less conflicts at the critical section so there isn't much time spent wasted
+in other threads just waiting for a lock to release.
+
+Why do the three protected operations slow down as the number of threads rise?
+This is due to the fact that a lot of lock checking happens as the ammount of threads increase and this can waste a 
+lot of time, especially when the yield option is used are more context switches will happen. 
+
+2.2.1
+Compare the variation in time per mutex-protected operation vs the number of threads in Part-1 (adds) and Part-2 (sorted lists).
+The are both fairly linear. 
+
+Comment on the general shapes of the curves, and explain why they have this shape.
+For add, it increases sharply, but levels off after around 4 threads. 
+For list, it increase fairly linearly the entire time.
+
+2.2.2
+Compare the variation in time per protected operation vs the number of threads for list operations protected by Mutex vs Spin lcoks. Comment
+on the general shape of the curves, and explain why they have this shape. 
+Spin locks are way worse than mutex for a large number of threads because a lot of time is spent waiting. 
+For add, the spin lock grows a lot faster.
+For list, spin lock is initially less expensive but there the overall slope is much steeper than mutex.
+Contention is dealt with much faster in mutexs and thus the cost for operation goes down.

@@ -1,0 +1,109 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab2b_list.c - 
+Program that runs multiple threads on a list that at max will be iterations*threads long. For each iteration in a thread the thread
+adds a new element to the list. Then the thread checks the list's size, and then finally finds each item and deletes it. There is a yield
+option for the thread to yield in each one of the critical sections of this function and also an option for a mutex or spin lock.
+
+In part b we added an option to add multiple lists which will split the load of the elements using a basic hashing function. We also timed
+the ammount of time wasted on the locks and report that as well now.
+ 
+SortedList.h - 
+Header for sorted list program. Includes opt-yield extern which allows the calling program to yield at certain critical points.
+
+SortedList.c -
+File for sorted, doubly-linked list. Includes insert, delete, lookup, and length functions. Depending on the opt-yield integer, 
+you can trigger yields at critical sections in either one of these functions.
+
+Makefile -
+Build, dist and clean are fairly self explanatory. Tests runs all the tests and puts it in an appropriate csv file.
+Graphs takes the csv files and uses gnuplot to make the appropriate graphs. Dependicy checking is very important. 
+I wasn't able to pass the sanity check until I stopped my make clean from removing the .csv and .png files.
+
+In part b we added profile, which uses google's perftools to create a cpu profile of lab2_list.
+
+profile.out -
+The results of running google's perftools. Shows that most of the time is spent waiting on the spinlock. 
+
+lab2_list.csv -
+Contains results from tests
+
+*.png -
+Contains the gnuplot graphs
+
+README -
+This file
+
+Questions -
+2.3.1 - 
+Where do you believe most of the CPU time is spent in the 1 and 2 thread lists?
+Most of the CPU time is spent performing the list operations. I would say mostly in 
+insertion, lookup, and length
+
+Why do you believe thse to be the most expensive parts of the code?
+This is because for insertion you need to go through the entire list (at worst) 
+to insert an element, and this is done an iteration ammount of times.
+Lookup also has to go through the entire list (at worst) and is done an iteration
+ammount of times.
+Length is definitely the least expensive as it has to go through the entire list (always)
+but only once.
+
+Where do you believe most of the CPU time is being spent in the high-thread spin-lock tests?
+In the while loop wasting cycles waiting for the lock to become available. This is because if one thread 
+gains the lock and the CPU switches context, it could in worst case go through every other thread before it comes
+back, and those threads would just be wasting cycles waiting for the lock to be released.
+
+Where do you believe most of the CPU time is being spent in the high-thread mutex tests?
+I believe most of the time is spent on doing list exercises, due to the fact that mutex sleeps the current thread
+if the critical section is locked. Cycles aren't wasted in a looplike in the spin-lock case.
+
+2.3.2 -
+Where (what lines of code) are consuming most of the CPU time when the spin-lock version of the list 
+exerciser is run with a large number of threads?
+The while loop with the test_and_set command is what is consuming most of the CPU time.
+This is located in the spinLock function that I have created.
+
+Why does this operation become so expensive with large number of threads?
+Because whenever the critical section is locked, the threads that do not have the lock are just stuck in this loop
+until the lock unlocks. If there are multiple threads, only one of the threads can then retrieve the lock, so all the 
+other threads remain stuck in that loop. The larger ammount of threads, the more threads are going to be running  in this 
+loop and thus explains why this operation is so expensive.
+
+2.3.3 - 
+Why does the average lock-wait time rise so dramatically with the number of contending threads?
+Because more threads mean that more threads are waiting when one thread is in the critical section. If you have 2 threads, 
+only one thread is waiting to grab the lock. However, if you have 16, all of a sudden you have 15 other threads waiting till 
+they can eventually get the lock. 
+
+Why does the completion time per operation rise (less dramatically) with the number of contending threads?
+The cost per operation increases due to the increasing number of context switches made when the ammount of threads increase.
+The actual act of a mutex lock should not take too long as it just puts a thread to sleep. But switching through all these 
+threads definitely will add overhead as you would have to store and recieve data with each switch and depending on how caching
+is handled can be fairly expensive.
+
+How is it possible for the wait time per operation to go upfaster (or higher) than the completion time of the operation?
+This is because the more threads added, the more threads are waiting at a critical section. However, even if more threads are 
+waiting, around the same ammount of operations per second are running on the processor (plus the context switch overhead).
+Overall, the wait time is directly dependent on the ammount of threads while completion time is not as dependent.
+
+2.3.4 -
+Explain the change in performance of the synchronized methods as a function of the number of lists.
+The performance has improved greatly with the number of lists as when you have multiple lists, you can have a lock
+dedicated to each one, and as such threads can be working on individual lists instead of all of them
+having to wait while one thread just works on the master list.
+Overall, the larger the number of lists, the less contention will be faced for the locks, and the performance will increase. 
+
+Should the throughput countinue increasing as the number of lists is further increased? If not, explain why not.
+Not necessarily. Once the ammount of lists hits the ammounts of threads, throughput will increase much slower, and it will be 
+dependent on the hashing function at that point. A worse hashing function would imply more contention and more lists can allow
+for a little more throughput, but a better hashing function would imply as close to 0 contention, and more lists will not really 
+do anything.
+
+It seems reasonable to suggest the throughput of an N-way partitioned list should be equivalent to the throughput of a single
+list with fewer (1/N) threads. Does this appear to be true in the above curves? If not, explain why not.
+This does seem to be the case. This makes sense because assuming a good hashing function, even if the N-way partitioned list
+has N times more elements, with good multiprocessing, each thread can work on it's own partition and finish at the same time 
+the single thread does with the smaller ammount of elements.

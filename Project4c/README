@@ -1,0 +1,25 @@
+NAME: Srivishnu Ramamurthi
+EMAIL: vishnuvtt@gmail.com
+ID: 504845437
+SLIPDAYS: 0
+
+lab4c-tcp.c -
+This program does the exact same as lab4b except it gets input from a server
+and sends output back to the server.
+
+lab4c-tls.c -
+This program does the same thing as lab4c-tcp.c except it also establishes a 
+secure tls connection to the server before sending and recieving data.
+
+Makefile -
+default: builds the program using the -Wall and -Wextra options along with
+the -lmraa library for the sensors and the -lm library for the log function.
+
+For tls also uses the -lssl and -lcrypto libraries
+
+clean: gets rid of the executables and tar
+
+dist: makes a tar of the README, Makefile, lab4c-tls.c, and lab4c-tcp.c
+
+README -
+This file
