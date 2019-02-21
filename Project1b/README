@@ -15,7 +15,7 @@ We also have a log option that logs the encrypted input and the pre decrypted ou
 
 lab1b-server.c -
 We first extract the options and open a socket for connection. Once we connect, we create pipes to and from
-the shell and crete a child process that runs the shell. 
+the shell and create a child process that runs the shell. 
 The main process then polls for data from the 
 client and decrypts it based on the file supplied and then sends that to the shell.
 The shell output is then encrypted and sent back to the client.
